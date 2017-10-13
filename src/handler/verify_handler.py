@@ -11,6 +11,7 @@ import tornado.options
 import tornado.web
 
 from util.WXBizMsgCrypt import WXBizMsgCrypt
+import xml.etree.cElementTree as ET
 
 
 class main_handler(tornado.web.RequestHandler):
@@ -54,6 +55,9 @@ class main_handler(tornado.web.RequestHandler):
             sCorpId='wwec73722ca98c0f78'
         )
         ret, xml_content = wxmsg_crypt.DecryptMsg(xml, msg_signature, timestamp, nonce)
-        self.write(xml_content)
+        xml_tree = ET.fromstring(xml_content)
+        content = xml_tree.find("Content").text
+        print content
+        self.write(content)
         self.finish()
 
