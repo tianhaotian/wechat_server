@@ -10,6 +10,8 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 
+from util.WXBizMsgCrypt import WXBizMsgCrypt
+
 
 class main_handler(tornado.web.RequestHandler):
     '''
@@ -17,6 +19,8 @@ class main_handler(tornado.web.RequestHandler):
     '''
     ROUTE = '/'
 
+    @tornado.web.asynchronous
+    @tornado.gen.engine
     def get(self):
         self.do_action()
 
@@ -26,15 +30,12 @@ class main_handler(tornado.web.RequestHandler):
         self.do_action()
 
     def do_action(self):
-        if self.request.body:
-
-            print "there is post body"
-
-            self.write('ok')
-            self.finish()
-        else:
-            self.write('fail')
-            self.finish()
-
-
+        msg_signature = self.get_argument('msg_signature', '')
+        timestamp = self.get_argument('timestamp', '')
+        nonce = self.get_argument('nonce', '')
+        echostr = self.get_argument('echostr', '')
+        wxmsg_crypt = WXBizMsgCrypt()
+        ret, sReplyEchoStr = wxmsg_crypt.VerifyURL(msg_signature, timestamp, nonce, echostr)
+        self.write(sReplyEchoStr)
+        self.finish()
 
