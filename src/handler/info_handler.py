@@ -13,11 +13,11 @@ import tornado.web
 from util.WXBizMsgCrypt import WXBizMsgCrypt
 
 
-class main_handler(tornado.web.RequestHandler):
+class info_handler(tornado.web.RequestHandler):
     '''
     Verify Server
     '''
-    ROUTE = '/'
+    ROUTE = '/api/info'
 
     @tornado.web.asynchronous
     @tornado.gen.engine
@@ -27,7 +27,7 @@ class main_handler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine
     def post(self, *args, **kwargs):
-        self.do_action()
+        self.do_post_action()
 
     def do_action(self):
         msg_signature = self.get_argument('msg_signature', '')
@@ -43,3 +43,16 @@ class main_handler(tornado.web.RequestHandler):
         self.write(sReplyEchoStr)
         self.finish()
 
+    def do_post_action(self):
+        msg_signature = self.get_argument('msg_signature', '')
+        timestamp = self.get_argument('timestamp', '')
+        nonce = self.get_argument('nonce', '')
+        xml = self.request.body
+        wxmsg_crypt = WXBizMsgCrypt(
+            sToken='FIMcpV',
+            sEncodingAESKey='2Cp1DJwT5rvp4MH4CLo4aDqiXrERKWjLWfOcPDWstAM',
+            sCorpId='wwec73722ca98c0f78'
+        )
+        ret, xml_content = wxmsg_crypt.DecryptMsg(xml, msg_signature, timestamp, nonce)
+        self.write(xml_content)
+        self.finish()
