@@ -34,7 +34,7 @@ class main_handler(tornado.web.RequestHandler):
         timestamp = self.get_argument('timestamp', '')
         nonce = self.get_argument('nonce', '')
         echostr = self.get_argument('echostr', '')
-        wxmsg_crypt = WXBizMsgCrypt()
+        wxmsg_crypt = WXBizMsgCrypt(sToken='FIMcpV', sEncodingAESKey='2Cp1DJwT5rvp4MH4CLo4aDqiXrERKWjLWfOcPDWstAM', sCorpId='wwec73722ca98c0f78')
         ret, sReplyEchoStr = wxmsg_crypt.VerifyURL(msg_signature, timestamp, nonce, echostr)
         self.write(sReplyEchoStr)
         self.finish()
