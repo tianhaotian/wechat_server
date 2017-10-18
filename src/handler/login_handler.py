@@ -18,3 +18,4 @@ class login_handler(tornado.web.RequestHandler):
     @tornado.gen.engine
     def get(self):
         self.write("success")
+        self.finish()
