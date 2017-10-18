@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import json
 import uuid
@@ -48,6 +48,7 @@ class info_handler(tornado.web.RequestHandler):
         timestamp = self.get_argument('timestamp', '')
         nonce = self.get_argument('nonce', '')
         xml = self.request.body
+        print xml
         wxmsg_crypt = WXBizMsgCrypt(
             sToken='FIMcpV',
             sEncodingAESKey='2Cp1DJwT5rvp4MH4CLo4aDqiXrERKWjLWfOcPDWstAM',

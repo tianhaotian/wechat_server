@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-import multiprocessing
+import os
 import sys
 import tornado.web
 import tornado.httpserver
@@ -10,10 +10,12 @@ import tornado.ioloop
 
 from tornado.options import define,options
 from util.walk_modules import walk_modules
+from handler.main_handler import main_handler
+from handler.verify_handler import verify_handler
+from handler.info_handler import info_handler
 
 p = sys.argv[1]
 define("port", default=p, type=int)
-define("bdptag", default="enterprise", help="service tag")
 
 
 class Main_Application(tornado.web.Application):
@@ -35,10 +37,18 @@ class Main_Application(tornado.web.Application):
                     break
         return handlers
 
+handlers = [
+    (r"/", main_handler),
+    (r"/api/verify", verify_handler),
+    (r"/api/info", info_handler),
+]
+
+template_path = os.path.join(os.path.dirname(__file__), "template")
+
 if __name__ == "__main__":
 
     tornado.options.parse_command_line()
-    app = Main_Application()
+    app = tornado.web.Application(handlers, template_path)
     httpserver = tornado.httpserver.HTTPServer(app)
     httpserver.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()

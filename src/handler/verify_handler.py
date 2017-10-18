@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
-
-import json
-import uuid
+# -*- coding: utf-8 -*-
 
 import tornado.gen
 import tornado.httpserver
@@ -14,11 +11,11 @@ from util.WXBizMsgCrypt import WXBizMsgCrypt
 import xml.etree.cElementTree as ET
 
 
-class main_handler(tornado.web.RequestHandler):
+class verify_handler(tornado.web.RequestHandler):
     '''
     Verify Server
     '''
-    ROUTE = '/'
+    ROUTE = '/api/verify'
 
     @tornado.web.asynchronous
     @tornado.gen.engine
