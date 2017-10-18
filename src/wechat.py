@@ -13,6 +13,7 @@ from util.walk_modules import walk_modules
 from handler.main_handler import main_handler
 from handler.verify_handler import verify_handler
 from handler.info_handler import info_handler
+from handler.login_handler import login_handler
 
 p = sys.argv[1]
 define("port", default=p, type=int)
@@ -41,6 +42,7 @@ handlers = [
     (r"/", main_handler),
     (r"/api/verify", verify_handler),
     (r"/api/info", info_handler),
+    (r"/api/login", login_handler)
 ]
 
 template_path = os.path.join(os.path.dirname(__file__), "template")
